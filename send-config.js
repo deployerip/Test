@@ -21,6 +21,12 @@ try {
     // Read the config file
     const configText = fs.readFileSync(configFilePath, 'utf8');
 
+    // Check if the file is empty
+    if (!configText.trim()) {
+        console.error('Config file is empty');
+        process.exit(1);
+    }
+
     // Debugging logs
     console.log('Telegram Bot Token:', TELEGRAM_BOT_TOKEN ? '***' : 'Not set');
     console.log('Telegram Chat ID:', TELEGRAM_CHAT_ID ? '***' : 'Not set');
