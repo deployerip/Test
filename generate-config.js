@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { fetchKeys, fetchAccount, generateWireGuardConfig } = require('./config-functions'); // Updated import
+const { fetchKeys, fetchAccount, generateWireGuardConfig } = require('./config-functions');
 
 // Directory where the config will be saved
 const dir = './generated';
