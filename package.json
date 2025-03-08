@@ -1,11 +1,5 @@
 {
-  "name": "config-generator",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node generate-config.js"
-  },
   "dependencies": {
-    "node-fetch": "^2.6.7"  // You can update this to the latest version if needed
+    "node-fetch": "^2.6.7"  // You can update this version later
   }
 }
