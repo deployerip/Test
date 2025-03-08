@@ -55,34 +55,17 @@ const fetchAccount = async (publicKey, installId, fcmToken) => {
 // Generate WireGuard Configuration Text
 const generateWireGuardConfig = (data, privateKey) => {
     return `
-    [Interface]
-    PrivateKey = ${privateKey}
-    Address = ${data.config.interface.addresses.v4}/32, ${data.config.interface.addresses.v6}/128
-    DNS = 1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001
-    MTU = 1280
+[Interface]
+PrivateKey = ${privateKey}
+Address = ${data.config.interface.addresses.v4}/32, ${data.config.interface.addresses.v6}/128
+DNS = 1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001
+MTU = 1280
 
-    [Peer]
-    PublicKey = ${data.config.peers[0].public_key}
-    AllowedIPs = 0.0.0.0/0, ::/0
-    Endpoint = engage.cloudflareclient.com:2408
-    `;
-};
-
-// Generate Reserved Parameter Dynamically
-const generateReserved = (clientId) => {
-    return Array.from(atob(clientId))
-        .map((char) => char.charCodeAt(0))
-        .slice(0, 3)
-        .join('%2C');
-};
-
-// Generate V2Ray URL
-const generateV2RayURL = (privateKey, publicKey, ipv4, ipv6, reserved) => {
-    return `wireguard://${encodeURIComponent(privateKey)}@engage.cloudflareclient.com:2408?address=${encodeURIComponent(
-        ipv4 + '/32'
-    )},${encodeURIComponent(ipv6 + '/128')}&reserved=${reserved}&publickey=${encodeURIComponent(
-        publicKey
-    )}&mtu=1420#V2ray-Config`;
+[Peer]
+PublicKey = ${data.config.peers[0].public_key}
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = engage.cloudflareclient.com:2408
+`;
 };
 
 // Export all functions to be used in other scripts
@@ -90,6 +73,4 @@ module.exports = {
     fetchKeys,
     fetchAccount,
     generateWireGuardConfig,
-    generateReserved,
-    generateV2RayURL
 };
