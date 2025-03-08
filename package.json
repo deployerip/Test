@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "node-fetch": "^2.6.7"  // You can update this version later
+    "node-fetch": "^2.6.7"
   }
 }
