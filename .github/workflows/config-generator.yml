@@ -1,0 +1,32 @@
+name: Generate and Send Config via Telegram
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'  # Runs every 5 minutes
+  workflow_dispatch:  # Allow manual triggers as well
+
+jobs:
+  generate-and-send:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'  # You can adjust the version as necessary
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run Config Generator Script
+      run: node generate-config.js
+
+    - name: Send Config via Telegram
+      run: |
+        node send-config.js
+      env:
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
