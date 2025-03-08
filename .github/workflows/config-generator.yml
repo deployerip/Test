@@ -19,7 +19,7 @@ jobs:
           node-version: '18'  # Use Node.js 18 (LTS) or higher
 
       - name: Install dependencies
-        run: npm install axios
+        run: npm install axios node-fetch
 
       - name: Generate config
         run: node generate-config.js  # First, generate the config
