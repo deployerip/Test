@@ -84,3 +84,15 @@ DNS = 1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001
 MTU = 1280
 
 [Peer]
+PublicKey = ${data.config.peers[0].public_key}
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = engage.cloudflareclient.com:2408
+`;
+};
+
+// Export all functions to be used in other scripts
+module.exports = {
+    fetchKeys,
+    fetchAccount,
+    generateWireGuardConfig,
+};
