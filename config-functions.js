@@ -3,30 +3,43 @@ const fetch = require('node-fetch');
 // Fetch Public and Private Keys from the API
 const fetchKeys = async () => {
     try {
+        console.log('Fetching keys from API...');
         const response = await fetch('https://www.iranguard.workers.dev/keys');
-        if (!response.ok) throw new Error(`Failed to fetch keys: ${response.status}`);
-        const data = await response.text();
-        return {
-            publicKey: extractKey(data, 'PublicKey'),
-            privateKey: extractKey(data, 'PrivateKey'),
-        };
+
+        // Check if the response is OK
+        if (!response.ok) {
+            throw new Error(`Failed to fetch keys: ${response.status} ${response.statusText}`);
+        }
+
+        // Parse the response as JSON
+        const data = await response.json();
+        console.log('API response:', data);
+
+        // Extract public and private keys
+        const publicKey = data.PublicKey;
+        const privateKey = data.PrivateKey;
+
+        // Log the extracted keys
+        console.log('Extracted Public Key:', publicKey);
+        console.log('Extracted Private Key:', privateKey);
+
+        // Check if keys are valid
+        if (!publicKey || !privateKey) {
+            throw new Error('PublicKey or PrivateKey not found in the API response');
+        }
+
+        return { publicKey, privateKey };
     } catch (error) {
         console.error('Error fetching keys:', error);
         throw error;
     }
 };
 
-// Extract Specific Key from Text Data (e.g., PublicKey or PrivateKey)
-const extractKey = (data, keyName) => {
-    const regex = new RegExp(`${keyName}:\\s(.+)`);
-    const match = data.match(regex);
-    return match ? match[1].trim() : null;
-};
-
 // Fetch Account Data based on publicKey and installId
 const fetchAccount = async (publicKey, installId, fcmToken) => {
     const apiUrl = 'https://www.iranguard.workers.dev/wg';
     try {
+        console.log('Fetching account data...');
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -44,8 +57,17 @@ const fetchAccount = async (publicKey, installId, fcmToken) => {
                 locale: 'de_DE',
             }),
         });
-        if (!response.ok) throw new Error(`Failed to fetch account: ${response.status}`);
-        return response.json();
+
+        // Check if the response is OK
+        if (!response.ok) {
+            throw new Error(`Failed to fetch account: ${response.status} ${response.statusText}`);
+        }
+
+        // Parse the response as JSON
+        const accountData = await response.json();
+        console.log('Account data:', accountData);
+
+        return accountData;
     } catch (error) {
         console.error('Error fetching account:', error);
         throw error;
@@ -62,15 +84,3 @@ DNS = 1.1.1.1, 1.0.0.1, 2606:4700:4700::1111, 2606:4700:4700::1001
 MTU = 1280
 
 [Peer]
-PublicKey = ${data.config.peers[0].public_key}
-AllowedIPs = 0.0.0.0/0, ::/0
-Endpoint = engage.cloudflareclient.com:2408
-`;
-};
-
-// Export all functions to be used in other scripts
-module.exports = {
-    fetchKeys,
-    fetchAccount,
-    generateWireGuardConfig,
-};
