@@ -55,4 +55,13 @@ try {
     };
 
     // Send all chunks sequentially
-    (async ()
+    (async () => {
+        for (let i = 0; i < chunks.length; i++) {
+            await sendMessage(chunks[i], i);
+        }
+    })();
+
+} catch (error) {
+    console.error('Error reading config file:', error);
+    process.exit(1);
+}
